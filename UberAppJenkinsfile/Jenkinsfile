@@ -54,7 +54,7 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'dockerpass', toolName: 'docker'){
                        sh "docker system prune -a -f --volumes"
-                       sh "docker build -t uber ."
+                       sh "docker build -t uber Dockerfile"
                        sh "docker tag uber tkibnyusuf/uber:latest "
                        sh "docker push tkibnyusuf/uber:latest "
                     }

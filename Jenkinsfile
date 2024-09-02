@@ -7,11 +7,11 @@ pipeline{
         AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
     }
     stages {
-        stage('Checkout from Git'){
-            steps{
-                git branch: 'main', url: 'https://github.com/tkibnyusuf/uber-clone.git'
-            }
-        }
+        // stage('Checkout from Git'){
+        //     steps{
+        //         git branch: 'main', url: 'https://github.com/tkibnyusuf/uber-clone.git'
+        //     }
+        // }
         stage('Terraform version'){
              steps{
                  sh 'terraform --version'

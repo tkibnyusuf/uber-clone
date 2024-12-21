@@ -4,7 +4,7 @@ pipeline {
         stage('Run Terrascan with Docker') {
             steps {
                 sh '''
-                docker run --rm -v $(pwd):/iac accurics/terrascan:latest scan -d EKS_Terraform
+                docker run --rm -v $(pwd):/iac accurics/terrascan:latest scan -d iac/EKS_Terraform
                 '''
             }
         }

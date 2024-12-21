@@ -15,21 +15,46 @@ pipeline {
                     // Archive Terrascan results
                     archiveArtifacts artifacts: 'terrascan_output.json', allowEmptyArchive: true
                     
-                    // Parse JSON output manually using Groovy
+                    // Parse JSON output
                     def jsonContent = readFile('terrascan_output.json')
                     def parsedJSON = new groovy.json.JsonSlurper().parseText(jsonContent)
                     
-                    // Get the number of medium and high-severity violations
+                    // Count medium and high severity violations
                     def mediumViolations = parsedJSON.results.violations.findAll { it.severity == 'MEDIUM' }.size()
                     def highViolations = parsedJSON.results.violations.findAll { it.severity == 'HIGH' }.size()
 
-                    // Fail pipeline for medium or high severity violations
+                    // Fail pipeline if medium or high severity vulnerabilities exist
                     if (mediumViolations > 0 || highViolations > 0) {
                         error("Terrascan found ${mediumViolations} medium and ${highViolations} high severity vulnerabilities. Check terrascan_output.json for details.")
                     } else {
-                        echo "No critical vulnerabilities found. Terrascan passed successfully."
+                        echo "No critical vulnerabilities found. Proceeding with Terraform commands."
                     }
                 }
+            }
+        }
+        stage('Terraform Init') {
+            steps {
+                sh '''
+                cd /var/lib/jenkins/workspace/checkov_terraform/EKS_Terraform
+                terraform init
+                '''
+            }
+        }
+        stage('Terraform Validate') {
+            steps {
+                sh '''
+                cd /var/lib/jenkins/workspace/checkov_terraform/EKS_Terraform
+                terraform validate
+                '''
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                // Automatically approve the apply step
+                sh '''
+                cd /var/lib/jenkins/workspace/checkov_terraform/EKS_Terraform
+                terraform ${action} -auto-approve
+                '''
             }
         }
     }
@@ -38,7 +63,7 @@ pipeline {
             echo 'Pipeline execution completed.'
         }
         failure {
-            echo 'Pipeline failed due to detected vulnerabilities.'
+            echo 'Pipeline failed. Please check the logs for details.'
         }
     }
 }

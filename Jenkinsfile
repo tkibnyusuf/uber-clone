@@ -1,12 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout Code') {
-            steps {
-                // Clone your repository
-                git branch: 'main', url: 'https://github.com/your-repo.git'
-            }
-        }
         stage('Run Terrascan') {
             steps {
                 script {

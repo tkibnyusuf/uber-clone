@@ -41,7 +41,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 sh '''
-                cd /var/lib/jenkins/workspace/checkov_terraform/EKS_Terraform
+                cd /var/lib/jenkins/workspace/infrastructure_deployment/EKS_Terraform
                 terraform init
                 '''
             }
@@ -49,7 +49,7 @@ pipeline {
         stage('Terraform Validate') {
             steps {
                 sh '''
-                cd /var/lib/jenkins/workspace/checkov_terraform/EKS_Terraform
+                cd /var/lib/jenkins/workspace/infrastructure_deployment/EKS_Terraform
                 terraform validate
                 '''
             }
@@ -58,7 +58,7 @@ pipeline {
             steps {
                 // Automatically approve the apply step
                 sh '''
-                cd /var/lib/jenkins/workspace/checkov_terraform/EKS_Terraform
+                cd /var/lib/jenkins/workspace/infrastructure_deployment/EKS_Terraform
                 terraform ${action} -auto-approve
                 '''
             }

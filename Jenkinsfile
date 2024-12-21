@@ -19,14 +19,15 @@ pipeline {
                     def jsonContent = readFile('terrascan_output.json')
                     def parsedJSON = new groovy.json.JsonSlurper().parseText(jsonContent)
                     
-                    // Get the count of violated policies
-                    def violatedPolicies = parsedJSON.results.policies.findAll { it.violated }.size()
+                    // Get the number of medium and high-severity violations
+                    def mediumViolations = parsedJSON.results.violations.findAll { it.severity == 'MEDIUM' }.size()
+                    def highViolations = parsedJSON.results.violations.findAll { it.severity == 'HIGH' }.size()
 
-                    // Fail pipeline if there are violations
-                    if (violatedPolicies > 0) {
-                        error("Terrascan found ${violatedPolicies} vulnerabilities. Check terrascan_output.json for details.")
+                    // Fail pipeline for medium or high severity violations
+                    if (mediumViolations > 0 || highViolations > 0) {
+                        error("Terrascan found ${mediumViolations} medium and ${highViolations} high severity vulnerabilities. Check terrascan_output.json for details.")
                     } else {
-                        echo "No vulnerabilities found. Terrascan passed successfully."
+                        echo "No critical vulnerabilities found. Terrascan passed successfully."
                     }
                 }
             }

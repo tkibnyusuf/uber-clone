@@ -32,7 +32,14 @@ resource "aws_eks_cluster" "example" {
   name     = "EKS_CLOUD"
   role_arn = aws_iam_role.example.arn
 
-
+  # Enable control plane logging
+  enabled_cluster_log_types = [
+    "api",
+    "audit",
+    "authenticator",
+    "controllerManager",
+    "scheduler"
+  ]
   vpc_config {
         subnet_ids = var.subnet_ids
   }

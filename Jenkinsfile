@@ -7,7 +7,7 @@ pipeline {
                     // Run Terrascan and save the exit status
                     def scanStatus = sh(
                         script: '''
-                        docker run --rm -v /var/lib/jenkins/workspace/checkov_terraform:/iac accurics/terrascan:latest scan -d /iac/EKS_Terraform > terrascan_output.json
+                        docker run --rm -v /var/lib/jenkins/workspace/checkov_terraform:/iac accurics/terrascan:latest scan -d /iac/EKS_Terraform -o json > terrascan_output.json
                         ''',
                         returnStatus: true
                     )

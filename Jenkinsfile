@@ -13,7 +13,8 @@ pipeline {
                 script {
                     def scanStatus = sh(
                         script: '''
-                        docker run --rm -v /var/lib/jenkins/workspace/eks_deployment:/iac accurics/terrascan:latest /bin/sh -c "terrascan init -p /iac/custom_policies && terrascan scan -d /iac/EKS_Terraform -p /iac/custom_policies -o json > /iac/terrascan_output.json"
+                        docker run --rm -v /var/lib/jenkins/workspace/eks_deployment:/iac accurics/terrascan:latest init
+                        docker run --rm -v /var/lib/jenkins/workspace/eks_deployment:/iac accurics/terrascan:latest scan -d /iac/EKS_Terraform -o json > terrascan_output.json
                         '''
                     )
 

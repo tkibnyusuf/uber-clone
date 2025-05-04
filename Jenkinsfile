@@ -12,10 +12,10 @@ pipeline {
                     // Run Terrascan and save the JSON output
                 script {
                     def scanStatus = sh(
-                        script:
-                        '''
-                        docker run --rm -v /var/lib/jenkins/workspace/eks_deployment:/iac tenable/terrascan:latest scan -d /iac/EKS_Terraform -o json > terrascan_output.json
-                        '''
+                        script: '''
+                        docker run --rm -v /var/lib/jenkins/workspace/infrastructure_deployment:/iac tenable/terrascan:latest scan -d /iac/EKS_Terraform -o json > terrascan_output.json
+                        ''',
+                        returnStatus: true
                     )
       
                     // Archive Terrascan results

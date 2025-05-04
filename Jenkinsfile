@@ -13,7 +13,7 @@ pipeline {
                     // Run Terrascan and save the JSON output
                     def scanStatus = sh(
                         script: '''
-                        docker run --rm -v /var/lib/jenkins/workspace/infrastructure_deployment:/iac accurics/terrascan:latest scan -d /iac/EKS_Terraform -o json > terrascan_output.json
+                        docker run --rm -v /var/lib/jenkins/workspace/eks_deployment:/iac accurics/terrascan:latest scan -d /iac/EKS_Terraform -o json > terrascan_output.json
                         ''',
                         returnStatus: true
                     )
@@ -41,7 +41,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 sh '''
-                cd /var/lib/jenkins/workspace/infrastructure_deployment/EKS_Terraform
+                cd /var/lib/jenkins/workspace/eks_deployment/EKS_Terraform
                 terraform init
                 '''
             }
@@ -49,7 +49,7 @@ pipeline {
         stage('Terraform Validate') {
             steps {
                 sh '''
-                cd /var/lib/jenkins/workspace/infrastructure_deployment/EKS_Terraform
+                cd /var/lib/jenkins/workspace/eks_deployment/EKS_Terraform
                 terraform validate
                 '''
             }
@@ -58,7 +58,7 @@ pipeline {
             steps {
                 // Automatically approve the apply step
                 sh '''
-                cd /var/lib/jenkins/workspace/infrastructure_deployment/EKS_Terraform
+                cd /var/lib/jenkins/workspace/eks_deployment/EKS_Terraform
                 terraform ${action} -auto-approve
                 '''
             }

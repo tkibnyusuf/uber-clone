@@ -13,7 +13,7 @@ pipeline {
                 script {
                     def scanStatus = sh(
                         script: 
-                        sh 'docker run --rm -v $WORKSPACE:/iac alpine /bin/sh -c "echo hello && echo world"'
+                        'docker run --rm -v $WORKSPACE:/iac alpine /bin/sh -c "echo hello && echo world"'
                         
                     )
 

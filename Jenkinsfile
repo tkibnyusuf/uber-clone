@@ -13,11 +13,10 @@ pipeline {
                 script {
                     def scanStatus = sh(
                         script: 
-                        'docker run --rm -v $WORKSPACE:/iac alpine /bin/sh -c "echo hello && echo world"'
+                        sh 'docker run --rm -v $WORKSPACE:/iac accurics/terrascan:latest /bin/sh -c "terrascan init && terrascan scan -d /iac/EKS_Terraform -o json > /iac/terrascan_output.json"'
                         
                     )
-
-                    
+      
                     // Archive Terrascan results
                     archiveArtifacts artifacts: 'terrascan_output.json', allowEmptyArchive: true
                     

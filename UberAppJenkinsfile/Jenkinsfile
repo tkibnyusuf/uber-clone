@@ -41,13 +41,16 @@ pipeline{
         }
         stage('OWASP FS SCAN') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit',
-                                odcInstallation: 'DP-Check',
-                                nvdApiKeyId: 'NVD_API_KEY'  // <-- moved here
+                dependencyCheck(
+                    additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit',
+                    odcInstallation: 'DP-Check',
+                    apiKey: "${NVD_API_KEY}"   // <-- Correct parameter
+                )
         
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
+
 
 
          stage('TRIVY FS SCAN') {
